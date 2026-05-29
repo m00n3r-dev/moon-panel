@@ -8,6 +8,8 @@ require (
 )
 
 require (
+	github.com/jmoiron/sqlx v1.4.0 // indirect
+	github.com/lib/pq v1.12.3 // indirect
 	golang.org/x/net v0.51.0 // indirect
 	golang.org/x/sys v0.42.0 // indirect
 	golang.org/x/text v0.34.0 // indirect
