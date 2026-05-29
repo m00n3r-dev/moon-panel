@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moon Panel - Project Plan</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d1117; color: #e6edf3; line-height: 1.6; padding: 40px 20px; }
+  .container { max-width: 1000px; margin: 0 auto; }
+  h1 { font-size: 2em; margin-bottom: 8px; color: #f0f6fc; }
+  h2 { font-size: 1.4em; margin-top: 48px; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid #30363d; color: #f0f6fc; }
+  h3 { font-size: 1.1em; margin-top: 24px; margin-bottom: 8px; color: #f0f6fc; }
+  p { margin-bottom: 12px; }
+  hr { border: none; border-top: 1px solid #21262d; margin: 40px 0; }
+  .mermaid { background: #161b22; border-radius: 8px; padding: 20px; margin: 16px 0; display: flex; justify-content: center; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  th, td { border: 1px solid #30363d; padding: 10px 14px; text-align: left; }
+  th { background: #161b22; font-weight: 600; }
+  tr:nth-child(even) { background: #161b22; }
+  ul, ol { margin: 8px 0 16px 24px; }
+  li { margin-bottom: 4px; }
+  code { background: #161b22; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+  pre { background: #161b22; border-radius: 8px; padding: 16px; overflow-x: auto; margin: 12px 0; font-size: 0.9em; }
+  strong { color: #f0f6fc; }
+  a { color: #58a6ff; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Moon Panel — Project Plan</h1>
+
+<h2>Planning Methodology: C4 Model</h2>
+<p>Top engineers use the <strong>C4 Model</strong> (Context → Container → Component → Code) by Simon Brown. It's the industry standard at companies like Amazon, Netflix, and Spotify for visualizing software architecture at different zoom levels.</p>
+<ul>
+  <li>Forces you to think about <strong>system boundaries</strong> first</li>
+  <li>Scales from whiteboard doodles to deployment diagrams</li>
+  <li>Easy to communicate with both engineers and stakeholders</li>
+  <li>Works with Mermaid natively</li>
+</ul>
+
+<hr>
+
+<h2>1. Context Diagram (System Scope)</h2>
+<p>An <strong>admin panel</strong> for managing Claude AI interactions — conversations, API keys, usage stats, and user access.</p>
+<pre class="mermaid">
+graph TD
+  User["Platform User"]
+  Admin["Admin"]
+  Moon["Moon Panel"]
+  Claude["Claude API"]
+  Email["Email Service"]
+  User -->|Chats, views history| Moon
+  Admin -->|Manages config, users, keys| Moon
+  Moon -->|Prompts and responses| Claude
+  Moon -->|Invites and alerts| Email
+</pre>
+
+<hr>
+
+<h2>2. Container Diagram (High-Level Architecture)</h2>
+<pre>
+Browser
+  |
+  v
+nginx --- serves static React build + reverse proxy
+  |
+  +--> /api/* --> NestJS (REST + WebSocket BFF)
+  |                 |
+  |                 +--> Go Auth Service
+  |                 +--> Go Config Service (nginx config gen)
+  |                 +--> Go Rate Limiter
+  |                 +--> Go Billing Service
+  |                 |
+  |                 +--> PostgreSQL + Redis
+</pre>
+<pre class="mermaid">
+graph TD
+  User["User"]
+  Admin["Admin"]
+  React["React + Vite SPA"]
+  Nginx["nginx - Reverse Proxy + Static Files"]
+  NestJS["NestJS API / BFF"]
+  PG[("PostgreSQL")]
+  Redis[("Redis")]
+  GoAuth["Go Auth Service"]
+  GoConfig["Go Config Service"]
+  GoRate["Go Rate Limiter"]
+  GoBilling["Go Billing Service"]
+  ClaudeApi["Claude API"]
+  S3[("S3 / MinIO")]
+  User -->|HTTPS| React
+  Admin -->|HTTPS| React
+  React -->|HTTP| Nginx
+  Nginx -->|/api/*| NestJS
+  NestJS -->|gRPC| GoAuth
+  NestJS -->|gRPC| GoConfig
+  NestJS -->|gRPC| GoRate
+  NestJS -->|gRPC| GoBilling
+  NestJS -->|SQL| PG
+  NestJS -->|TCP| Redis
+  NestJS -->|HTTPS| ClaudeApi
+  NestJS -->|S3 API| S3
+  GoConfig -->|SIGHUP reload| Nginx
+</pre>
+
+<hr>
+
+<h2>3. Component Diagram (BFF + Go Services)</h2>
+<pre class="mermaid">
+graph TD
+  AuthGw["NestJS Auth Guard - Validates JWT"]
+  ChatGw["NestJS Chat Gateway - WebSocket + Streaming"]
+  ConfigGw["NestJS Config Controller"]
+  UserCtrl["NestJS User Controller - CRUD users"]
+  AuthSvc["Go Auth Service - JWT, bcrypt, OAuth2"]
+  ConfigSvc["Go Config Service - nginx templates, TLS"]
+  RateSvc["Go Rate Limiter - sliding window"]
+  BillingSvc["Go Billing Service - token counting, quotas"]
+  AuthGw -->|gRPC| AuthSvc
+  ChatGw -->|gRPC| RateSvc
+  ChatGw -->|gRPC| BillingSvc
+  ConfigGw -->|gRPC| ConfigSvc
+</pre>
+
+<hr>
+
+<h2>4. Stack Summary</h2>
+<table>
+  <tr><th>Layer</th><th>Technology</th><th>Role</th></tr>
+  <tr><td>Frontend</td><td>React + Vite</td><td>SPA UI</td></tr>
+  <tr><td>Proxy</td><td>nginx</td><td>Static files, reverse proxy, TLS termination</td></tr>
+  <tr><td>BFF</td><td>NestJS</td><td>API gateway, orchestrates Go services</td></tr>
+  <tr><td>Microservices</td><td>Go</td><td>Auth, config gen, rate limiter, billing</td></tr>
+  <tr><td>Database</td><td>PostgreSQL</td><td>Primary store</td></tr>
+  <tr><td>Cache</td><td>Redis</td><td>Sessions, rate-limit counters</td></tr>
+  <tr><td>Object Store</td><td>S3 / MinIO</td><td>Exports, logs, backups</td></tr>
+</table>
+<p><strong>Communication:</strong> NestJS to Go services via <strong>gRPC</strong> (preferred) or HTTP/REST.</p>
+
+<hr>
+
+<h2>5. Feature Roadmap (Basic v1)</h2>
+<table>
+  <tr><th>Layer</th><th>Feature</th><th>Priority</th></tr>
+  <tr><td>Auth</td><td>Email + password login</td><td>P0</td></tr>
+  <tr><td>Auth</td><td>JWT session management</td><td>P0</td></tr>
+  <tr><td>Chat</td><td>Send prompt to Claude</td><td>P0</td></tr>
+  <tr><td>Chat</td><td>Stream response to UI</td><td>P0</td></tr>
+  <tr><td>Config</td><td>Go generates nginx upstreams</td><td>P0</td></tr>
+  <tr><td>Chat</td><td>Conversation history</td><td>P1</td></tr>
+  <tr><td>Users</td><td>Admin CRUD for users</td><td>P1</td></tr>
+  <tr><td>Keys</td><td>Create and revoke API keys</td><td>P1</td></tr>
+  <tr><td>Billing</td><td>Token usage counter</td><td>P2</td></tr>
+  <tr><td>Export</td><td>Download conversation</td><td>P2</td></tr>
+</table>
+<p>Only P0 is required for v1. P1 and P2 can ship later.</p>
+
+<hr>
+
+<h2>6. Data Model (Core Entities)</h2>
+<pre class="mermaid">
+erDiagram
+  User ||--o{ ApiKey : has
+  User ||--o{ Conversation : owns
+  User ||--o{ UsageLog : generates
+  Conversation ||--o{ Message : contains
+  Conversation ||--o{ Export : exported_as
+  User {
+    uuid id PK
+    string email UK
+    string password_hash
+    string role "admin | member"
+    timestamp created_at
+  }
+  ApiKey {
+    uuid id PK
+    uuid user_id FK
+    string key_hash
+    string label
+    timestamp expires_at
+    timestamp created_at
+  }
+  Conversation {
+    uuid id PK
+    uuid user_id FK
+    string title
+    string model
+    int token_count
+    timestamp created_at
+  }
+  Message {
+    uuid id PK
+    uuid conversation_id FK
+    string role "user | assistant"
+    text content
+    int tokens
+    timestamp created_at
+  }
+  UsageLog {
+    uuid id PK
+    uuid user_id FK
+    uuid conversation_id FK
+    int prompt_tokens
+    int completion_tokens
+    timestamp created_at
+  }
+  Export {
+    uuid id PK
+    uuid conversation_id FK
+    string format "json | pdf"
+    string s3_key
+    timestamp created_at
+  }
+</pre>
+
+<hr>
+
+<h2>7. User Flow (Login + Chat)</h2>
+<pre class="mermaid">
+sequenceDiagram
+  actor U as User
+  participant W as React SPA
+  participant N as nginx
+  participant B as NestJS BFF
+  participant A as Go Auth
+  participant R as Go Rate Limit
+  participant C as Cache
+  participant D as DB
+  participant CLAUDE as Claude API
+  U->>W: Login (email + password)
+  W->>N: POST /api/auth/login
+  N->>B: Forward request
+  B->>A: gRPC VerifyCredentials
+  A->>D: Query user
+  D-->>A: User row
+  A->>C: Store session
+  A-->>B: JWT token
+  B-->>W: JWT
+  W-->>U: Logged in
+  U->>W: Send message
+  W->>N: POST /api/chat (JWT + prompt)
+  N->>B: Forward request
+  B->>A: gRPC ValidateJWT
+  A-->>B: User ID
+  B->>R: gRPC CheckRateLimit
+  R-->>B: OK
+  B->>D: Create conversation (if new)
+  B->>D: Store user message
+  B->>CLAUDE: POST /v1/messages
+  CLAUDE-->>B: Stream response
+  B->>D: Store assistant message
+  B->>D: Log token usage
+  B-->>W: Stream response chunks
+  W-->>U: Display response
+</pre>
+
+<hr>
+
+<h2>8. Go Config Service (nginx config gen flow)</h2>
+<pre class="mermaid">
+sequenceDiagram
+  participant A as Admin
+  participant B as NestJS BFF
+  participant G as Go Config Service
+  participant N as nginx
+  participant F as Filesystem
+  A->>B: Updates upstream config
+  B->>G: gRPC UpdateConfig(newUpstreams)
+  G->>G: Template nginx.conf
+  G->>F: Write /etc/nginx/conf.d/moon.conf
+  G->>N: nginx -s reload (SIGHUP)
+  N-->>F: Reads new config
+  N-->>G: Reload success
+  G-->>B: OK
+  B-->>A: Config applied
+</pre>
+
+<hr>
+
+<h2>Next Steps</h2>
+<ol>
+  <li>Set up monorepo: /web (React), /bff (NestJS), /services (Go), /docs</li>
+  <li>Initialize React + Vite frontend</li>
+  <li>Scaffold NestJS BFF</li>
+  <li>Write Go auth microservice</li>
+  <li>Set up nginx with reverse proxy</li>
+  <li>Create PostgreSQL schema (5 tables above)</li>
+  <li>Implement auth flow (P0)</li>
+  <li>Implement chat flow + streaming (P0)</li>
+  <li>Write Go config service for nginx reloads (P0)</li>
+</ol>
+
+</div>
+
+<script>
+  mermaid.initialize({ startOnLoad: true, theme: 'dark', themeVariables: { primaryColor: '#1f6feb', primaryTextColor: '#e6edf3', primaryBorderColor: '#30363d', lineColor: '#58a6ff', secondaryColor: '#21262d', tertiaryColor: '#161b22' } });
+</script>
+</body>
+</html>
