@@ -24,12 +24,26 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-func GenerateToken(userID, email string, secret []byte) (string, error) {
+type TokenType string
+
+const (
+	JwtToken     TokenType = "jwt"
+	RefreshToken TokenType = "refresh"
+)
+
+func GenerateToken(userID, email string, secret []byte, tokenType TokenType) (string, error) {
+	expiresAt := 24 * time.Hour
+	if tokenType == JwtToken {
+		expiresAt = 24 * time.Hour
+	} else {
+		expiresAt = 24 * time.Hour * 30
+	}
+
 	claims := Claims{
 		UserID: userID,
 		Email:  email,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(expiresAt)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 		},
 	}
