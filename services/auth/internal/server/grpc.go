@@ -2,6 +2,8 @@ package server
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"time"
 
 	"github.com/google/uuid"
@@ -29,7 +31,10 @@ func NewAuthServer(userStore *store.UserStore, jwtSecret []byte) pb.AuthServiceS
 func (server *authServer) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
 	user, err := server.userStore.GetByEmail(ctx, req.Email)
 	if err != nil {
-		return nil, status.Errorf(codes.NotFound, "user not found")
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, status.Errorf(codes.NotFound, "user not found")
+		}
+		return nil, status.Errorf(codes.Internal, "database error: %v", err)
 	}
 
 	err = auth.CheckPassword(req.Password, user.PasswordHash)
