@@ -1,0 +1,39 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U moon -d moon_panel" ]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+    environment:
+      POSTGRES_USER: moon-panel
+      POSTGRES_PASSWORD: "0612"
+      POSTGRES_DB: moon_panel
+    ports:
+      - "5432:5432"
+    volumes:
+      - moon-panel-data:/var/lib/postgresql
+
+  auth:
+    build: services/auth
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "${DATABASE_URL}"
+      JWT_SECRET: "${JWT_SECRET}"
+      GRPC_PORT: "${AUTH_SERVICE_GRPC_PORT}"
+
+  migrate:
+    image: migrate/migrate
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./services/migrations:/migrations
+    command: ["-path", "/migrations", "-database", "${DATABASE_URL}", "up"]
+    profiles: ["setup"]
+
+volumes:
+  moon-panel-data:
