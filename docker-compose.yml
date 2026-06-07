@@ -31,7 +31,7 @@ services:
       postgres:
         condition: service_healthy
     volumes:
-      - ./services/migrations:/migrations
+      - ./migrations:/migrations
     command: ["-path", "/migrations", "-database", "${DATABASE_URL}", "up"]
     profiles: ["setup"]
 
