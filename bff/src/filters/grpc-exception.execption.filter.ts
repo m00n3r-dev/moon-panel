@@ -1,10 +1,12 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
-import { status as grpcStatus } from '@grpc/grpc-js';
+import { status as grpcStatus, ServiceError } from '@grpc/grpc-js';
+import { Response } from 'express';
 
 @Catch()
-export class GrpcExecptionFilter implements ExceptionFilter {
-  catch(exception: any, host: ArgumentsHost) {
-    const response = host.switchToHttp().getResponse();
+export class GrpcExceptionFilter implements ExceptionFilter {
+  catch(exception: ServiceError, host: ArgumentsHost) {
+    const response = host.switchToHttp().getResponse<Response>();
+    console.error(exception);
 
     if (exception.code !== undefined) {
       switch (exception.code) {
