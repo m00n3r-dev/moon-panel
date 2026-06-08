@@ -66,7 +66,7 @@ func (server *authServer) Register(ctx context.Context, req *pb.RegisterRequest)
 
 	exisisting_user, err := server.userStore.GetByEmail(ctx, req.Email)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "internal server error")
+		return nil, status.Errorf(codes.Internal, "failed to check duplicate users")
 	}
 
 	if exisisting_user != nil {

@@ -2,7 +2,8 @@ import * as grpc from '@grpc/grpc-js';
 import * as protoLoader from '@grpc/proto-loader';
 import { Injectable } from '@nestjs/common';
 
-const PROTO_PATH = __dirname + '/../../../proto/auth/v1/auth.proto';
+const PROTO_PATH =
+  process.env.PROTO_PATH || __dirname + '/../../../proto/auth/v1/auth.proto';
 
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
@@ -19,8 +20,9 @@ export class GrpcClient {
   private client: any;
 
   constructor() {
+    const address = process.env.GRPC_AUTH_ADDRESS || 'localhost:50051';
     this.client = new proto.auth.v1.AuthService(
-      'localhost:50051',
+      address,
       grpc.credentials.createInsecure(),
     );
   }

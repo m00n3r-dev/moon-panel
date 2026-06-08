@@ -2,19 +2,34 @@ services:
   postgres:
     image: postgres:17-alpine
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U moon -d moon_panel" ]
+      test: [ "CMD-SHELL", "pg_isready -U moon-panel -d moon_panel" ]
       interval: 2s
       timeout: 2s
       retries: 10
     environment:
-      POSTGRES_USER: moon-panel
+      POSTGRES_USER: "moon-panel"
       POSTGRES_PASSWORD: "0612"
       POSTGRES_DB: moon_panel
     ports:
       - "5432:5432"
     volumes:
-      - moon-panel-data:/var/lib/postgresql
+      - moon-panel-data:/var/lib/postgresql/data
 
+  bff:
+    build:
+      context: .
+      dockerfile: bff/Dockerfile
+    depends_on:
+      auth:
+        condition: service_started
+    environment:
+      GRPC_AUTH_ADDRESS: "auth:${AUTH_SERVICE_GRPC_PORT}"
+      PROTO_PATH: "/app/proto/auth/v1/auth.proto"
+      PORT: 3001
+    ports:
+      - "3001:3001"
+
+  # MICRO SERVICES
   auth:
     build: services/auth
     depends_on:

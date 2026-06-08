@@ -7,7 +7,7 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() body: { email: string; password: string }) {
-    return await this.grpcClient.login(body.email, body.password);
+    return await this.grpcClient.login(body.email, body.password);  
   }
 
   @Post('register')
