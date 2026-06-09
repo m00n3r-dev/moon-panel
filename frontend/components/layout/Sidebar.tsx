@@ -40,11 +40,12 @@ const labelVariants = {
 
 const navItemVariants = {
   hidden: { opacity: 0, x: -12 },
-  visible: (index: number) => ({
-    opacity: 1,
-    x: 0,
-    transition: { delay: 0.05 * index, duration: 0.3, ease: "easeOut" },
-  }),
+  visible: (index: number) =>
+    ({
+      opacity: 1,
+      x: 0,
+      transition: { delay: 0.05 * index, duration: 0.3, ease: "easeOut" },
+    }) as const,
 };
 
 function handleLogout() {
