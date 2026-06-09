@@ -7,6 +7,7 @@ import {
   KeyRound,
   Users,
   Settings,
+  UserCircle,
   LogOut,
   ChevronLeft,
   ChevronRight,
@@ -21,6 +22,10 @@ const navItems = [
   { label: "API Keys", href: "/api-keys", icon: KeyRound },
   { label: "Users", href: "/users", icon: Users },
   { label: "Settings", href: "/settings", icon: Settings },
+];
+
+const bottomNavItems = [
+  { label: "Profile", href: "/profile", icon: UserCircle },
 ];
 
 const sidebarVariants = {
@@ -89,6 +94,42 @@ export function Sidebar({
       {/* Navigation */}
       <nav className="flex-1 space-y-1 px-2 py-4">
         {navItems.map((item, index) => {
+          const isActive = pathname === item.href;
+          const Icon = item.icon;
+          return (
+            <motion.div
+              key={item.href}
+              variants={navItemVariants}
+              initial="hidden"
+              animate="visible"
+              custom={index}
+            >
+              <Link
+                href={item.href}
+                className={`flex items-center gap-3 rounded-lg px-2.5 py-2 text-sm font-medium transition-colors ${
+                  isActive
+                    ? "bg-primary/15 text-primary"
+                    : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
+                }`}
+              >
+                <Icon className="h-5 w-5 shrink-0" />
+                <motion.span
+                  initial={false}
+                  animate={expanded ? "expanded" : "collapsed"}
+                  variants={labelVariants}
+                  className="whitespace-nowrap"
+                >
+                  {item.label}
+                </motion.span>
+              </Link>
+            </motion.div>
+          );
+        })}
+      </nav>
+
+      {/* Bottom nav */}
+      <nav className="space-y-1 px-2 pb-1">
+        {bottomNavItems.map((item, index) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
           return (

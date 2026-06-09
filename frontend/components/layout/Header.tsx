@@ -1,7 +1,8 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Bell, ChevronDown, LogOut } from "lucide-react";
+import { Bell, ChevronDown, LogOut, UserCircle } from "lucide-react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "@/lib/auth-context";
@@ -12,6 +13,7 @@ const pageTitles: Record<string, string> = {
   "/api-keys": "API Keys",
   "/users": "Users",
   "/settings": "Settings",
+  "/profile": "Profile",
 };
 
 function getInitials(firstName: string, lastName: string): string {
@@ -108,6 +110,16 @@ export function Header() {
                     {user.email}
                   </p>
                 </div>
+
+                {/* Profile */}
+                <Link
+                  href="/profile"
+                  onClick={() => setDropdownOpen(false)}
+                  className="flex items-center gap-2 px-3 py-2 text-sm text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface"
+                >
+                  <UserCircle className="h-4 w-4" />
+                  Profile
+                </Link>
 
                 {/* Logout */}
                 <button
