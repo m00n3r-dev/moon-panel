@@ -48,10 +48,10 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
         setAuthState({
           status: "authenticated",
           user: {
-            user_id: data.user_id,
+            user_id: data.userId ?? data.user_id,
             email: data.email,
-            first_name: data.first_name,
-            last_name: data.last_name,
+            first_name: data.firstName ?? data.first_name ?? "",
+            last_name: data.lastName ?? data.last_name ?? "",
           },
         });
       } catch {

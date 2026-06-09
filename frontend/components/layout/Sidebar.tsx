@@ -7,11 +7,12 @@ import {
   KeyRound,
   Users,
   Settings,
+  LogOut,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import type { Dispatch, SetStateAction } from "react";
 
 const navItems = [
@@ -40,6 +41,12 @@ const navItemVariants = {
     transition: { delay: 0.05 * index, duration: 0.3, ease: "easeOut" },
   }),
 };
+
+function handleLogout() {
+  localStorage.removeItem("jwt_token");
+  localStorage.removeItem("refresh_token");
+  window.location.href = "/login";
+}
 
 export function Sidebar({
   expanded,
@@ -115,8 +122,28 @@ export function Sidebar({
         })}
       </nav>
 
+      {/* Logout */}
+      <div className="border-t border-outline-variant/30 px-2 pt-2">
+        <motion.button
+          onClick={handleLogout}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-error"
+        >
+          <LogOut className="h-5 w-5 shrink-0" />
+          <motion.span
+            initial={false}
+            animate={expanded ? "expanded" : "collapsed"}
+            variants={labelVariants}
+            className="whitespace-nowrap"
+          >
+            Log Out
+          </motion.span>
+        </motion.button>
+      </div>
+
       {/* Collapse toggle */}
-      <div className="border-t border-outline-variant/30 p-2">
+      <div className="p-2">
         <motion.button
           onClick={() => onToggle((prev) => !prev)}
           whileHover={{ scale: 1.02 }}
