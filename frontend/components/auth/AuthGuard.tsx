@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -70,12 +71,22 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   if (authState.status === "loading") {
     return (
-      <div className="flex min-h-dvh items-center justify-center bg-surface">
-        <div className="flex flex-col items-center gap-3">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+        className="flex min-h-dvh items-center justify-center bg-surface"
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15, duration: 0.4 }}
+          className="flex flex-col items-center gap-3"
+        >
           <Loader2 className="h-6 w-6 animate-spin text-primary" />
           <p className="text-sm text-on-surface-variant">Verifying session…</p>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     );
   }
 
@@ -83,5 +94,13 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     return null;
   }
 
-  return <AuthProvider user={authState.user}>{children}</AuthProvider>;
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
+      <AuthProvider user={authState.user}>{children}</AuthProvider>
+    </motion.div>
+  );
 }

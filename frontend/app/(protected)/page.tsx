@@ -41,26 +41,10 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          label="Total Conversations"
-          value="1,284"
-          trend={{ direction: "up", text: "+12% from last month" }}
-        />
-        <StatCard
-          label="Active Users"
-          value="48"
-          trend={{ direction: "up", text: "+3 new this week" }}
-        />
-        <StatCard
-          label="API Calls Today"
-          value="3,521"
-          trend={{ direction: "up", text: "+8% from yesterday" }}
-        />
-        <StatCard
-          label="Token Usage"
-          value="2.4M"
-          trend={{ direction: "down", text: "-5% from last week" }}
-        />
+        <StatCard index={0} label="Total Conversations" value="1,284" trend={{ direction: "up", text: "+12% from last month" }} />
+        <StatCard index={1} label="Active Users" value="48" trend={{ direction: "up", text: "+3 new this week" }} />
+        <StatCard index={2} label="API Calls Today" value="3,521" trend={{ direction: "up", text: "+8% from yesterday" }} />
+        <StatCard index={3} label="Token Usage" value="2.4M" trend={{ direction: "down", text: "-5% from last week" }} />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -71,7 +55,7 @@ export default function DashboardPage() {
           </h2>
           <div className="space-y-3">
             {activityItems.map((item, index) => (
-              <ActivityItem key={index} {...item} />
+              <ActivityItem key={index} index={index} {...item} />
             ))}
           </div>
         </div>

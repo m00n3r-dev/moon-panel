@@ -160,6 +160,7 @@ The shape language is "Squircle-Adjacent"—rounded enough to feel modern and fr
 
 ## Libraries
 - **ICONS** lucide-react
+- **ANIMATION** framer-motion
 - **TABLE/LIST** tanstack table
 
 ## Architecture Decisions
@@ -175,3 +176,11 @@ The shape language is "Squircle-Adjacent"—rounded enough to feel modern and fr
 - **Do NOT use shadcn/ui.** We use plain Tailwind CSS v4 with custom design tokens defined in `globals.css`.
 - The design tokens follow the "Celestial Control" palette defined above in this file.
 - All custom colors are available as Tailwind classes (e.g. `bg-surface`, `text-primary`, `border-outline-variant`).
+
+### Animations
+- **All components must use framer-motion** for animations — no CSS transitions for layout changes or entrance effects.
+- The sidebar uses framer-motion `motion.aside` with `variants` for expand/collapse width animation and a custom easing curve for a smooth feel.
+- Page content uses staggered entrance animations: items fade + slide up with increasing `delay` values (e.g. `0.08 * index`) so elements enter one after another.
+- Interactive elements (buttons, links, cards) use `whileHover` and `whileTap` for micro-interactions like scale or lift.
+- The header title animates on route change via a `key` prop to trigger re-render.
+- The `AuthGuard` fades in the content once authentication is verified.
