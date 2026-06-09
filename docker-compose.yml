@@ -24,7 +24,7 @@ services:
         condition: service_started
     environment:
       GRPC_AUTH_ADDRESS: "auth:${AUTH_SERVICE_GRPC_PORT}"
-      PROTO_PATH: "/app/proto/auth/v1/auth.proto"
+      AUTH_PROTO_PATH: "/app/proto/auth/v1/auth.proto"
       PORT: 3001
     ports:
       - "3001:3001"

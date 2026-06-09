@@ -64,14 +64,14 @@ func (server *authServer) Register(ctx context.Context, req *pb.RegisterRequest)
 		return nil, status.Errorf(codes.Internal, "failed to hash the password")
 	}
 
-	exisisting_user, err := server.userStore.GetByEmail(ctx, req.Email)
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, "failed to check duplicate users")
-	}
+	// existing_user, err := server.userStore.GetByEmail(ctx, req.Email)
+	// if err != nil {
+	// 	return nil, status.Errorf(codes.Internal, "failed to check duplicate users")
+	// }
 
-	if exisisting_user != nil {
-		return nil, status.Errorf(codes.AlreadyExists, "email already exists")
-	}
+	// if existing_user != nil {
+	// 	return nil, status.Errorf(codes.AlreadyExists, "email already exists")
+	// }
 
 	user := &model.User{
 		ID:           uuid.NewString(),

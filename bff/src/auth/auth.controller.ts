@@ -9,8 +9,7 @@ export class AuthController implements OnModuleInit {
   private authService!: AuthServiceClient;
 
   onModuleInit() {
-    this.authService =
-      this.client.getService<AuthServiceClient>('AUTH_SERVICE');
+    this.authService = this.client.getService<AuthServiceClient>('AuthService');
   }
 
   @Post('login')
