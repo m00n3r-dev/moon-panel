@@ -19,7 +19,7 @@ export default function ProtectedLayout({
 
         <div className="flex flex-1 flex-col">
           <Header />
-          <main className="flex-1 overflow-auto p-6">{children}</main>
+          <main className="relative flex-1 overflow-auto p-6">{children}</main>
         </div>
       </div>
     </AuthGuard>
