@@ -158,7 +158,20 @@ The shape language is "Squircle-Adjacent"—rounded enough to feel modern and fr
 - **Data Visualizations:** Charts should use primary and tertiary colors with area gradients that fade to transparent. Grid lines in charts should be kept to a minimum (maximum 3-4 horizontal lines) to maintain cleanliness.
 - **Progress Bars:** Thin (4px) with a glowing leading edge to signify "active energy" or data transfer.
 
-## Libraries 
-- **UI LIB** always use shadcn components
-- **ICONS** lucide icons
+## Libraries
+- **ICONS** lucide-react
 - **TABLE/LIST** tanstack table
+
+## Architecture Decisions
+
+### Component Structure
+- **Every page must be composed of small, focused components** — never put everything in a single large file.
+- Each component lives in its own file under `components/<domain>/`.
+- Shared layout pieces (sidebar, header, etc.) go in `components/layout/`.
+- Domain-specific UI (stat cards, activity items, etc.) go in `components/<domain>/`.
+- Page files in `app/` should only orchestrate components and data — rendering logic stays in components.
+
+### UI Library
+- **Do NOT use shadcn/ui.** We use plain Tailwind CSS v4 with custom design tokens defined in `globals.css`.
+- The design tokens follow the "Celestial Control" palette defined above in this file.
+- All custom colors are available as Tailwind classes (e.g. `bg-surface`, `text-primary`, `border-outline-variant`).
