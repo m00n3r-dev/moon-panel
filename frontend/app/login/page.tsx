@@ -26,9 +26,9 @@ export default function LoginPage() {
         password,
       });
 
-      localStorage.setItem("jwt_token", data.jwt_token);
-      if (data.refresh_token) {
-        localStorage.setItem("refresh_token", data.refresh_token);
+      localStorage.setItem("jwt_token", data.jwtToken);
+      if (data.refreshToken) {
+        localStorage.setItem("refresh_token", data.refreshToken);
       }
 
       router.push("/");
