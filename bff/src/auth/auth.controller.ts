@@ -2,6 +2,9 @@ import { Body, Controller, Inject, OnModuleInit, Post } from '@nestjs/common';
 import type { ClientGrpc } from '@nestjs/microservices';
 import { AuthServiceClient } from './types';
 import { firstValueFrom } from 'rxjs';
+import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
+import { ValidateTokenDto } from './dto/validate-token.dto';
 
 @Controller('api/auth')
 export class AuthController implements OnModuleInit {
@@ -13,25 +16,20 @@ export class AuthController implements OnModuleInit {
   }
 
   @Post('login')
-  async login(@Body() data: { email: string; password: string }) {
+  async login(@Body() data: LoginDto) {
     return await firstValueFrom(this.authService.Login(data));
   }
 
   @Post('register')
   async register(
     @Body()
-    data: {
-      email: string;
-      first_name: string;
-      last_name: string;
-      password: string;
-    },
+    data: RegisterDto,
   ) {
     return await firstValueFrom(this.authService.Register(data));
   }
 
   @Post('validate-token')
-  async validateToken(@Body() data: { jwtToken: string }) {
+  async validateToken(@Body() data: ValidateTokenDto) {
     return await firstValueFrom(this.authService.ValidateToken(data));
   }
 }

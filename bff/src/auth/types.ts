@@ -11,7 +11,7 @@ export interface AuthServiceClient {
     last_name: string;
     password: string;
   }): Observable<{ user_id: string }>;
-  ValidateToken(data: { jwtToken: string }): Observable<{
+  ValidateToken(data: { jwt_token: string }): Observable<{
     user_id: string;
     email: string;
     first_name: string;
