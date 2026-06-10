@@ -39,6 +39,8 @@ services:
       DATABASE_URL: "${DATABASE_URL}"
       JWT_SECRET: "${JWT_SECRET}"
       GRPC_PORT: "${AUTH_SERVICE_GRPC_PORT}"
+    ports:
+      - "${AUTH_SERVICE_GRPC_PORT}:${AUTH_SERVICE_GRPC_PORT}"
 
   migrate:
     image: migrate/migrate
