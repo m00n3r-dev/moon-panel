@@ -1,17 +1,16 @@
 import { GrpcOptions, Transport } from '@nestjs/microservices';
+import { getEnv } from './envHelper';
 
 const staticBaseProtoPath = `${__dirname}/../../../proto`;
 
 const resolveProtoPath = (code: string, protoPath: string) => {
-  return (
-    process.env[`${code}_PROTO_PATH`] || `${staticBaseProtoPath}/${protoPath}`
-  );
+  return getEnv(`${code}_PROTO_PATH`) || `${staticBaseProtoPath}/${protoPath}`;
 };
 
 const grpcAddress = (code: string) => {
   return (
-    process.env[`GRPC_${code}_ADDRESS`] ||
-    `127.0.0.1:${process.env[`${code}_SERVICE_GRPC_PORT`]}`
+    getEnv(`GRPC_${code}_ADDRESS`) ||
+    `127.0.0.1:${getEnv(`${code}_SERVICE_GRPC_PORT`)}`
   );
 };
 
