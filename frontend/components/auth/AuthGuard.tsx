@@ -33,7 +33,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
       try {
         const { data } = await apiClient.post("/api/auth/validate-token", {
-          jwtToken: token,
+          jwt_token: token,
         });
 
         if (cancelled) return;
