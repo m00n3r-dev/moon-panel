@@ -27,6 +27,9 @@ export const buildClientModule = (
       package: packageName,
       protoPath: resolveProtoPath(code, protoPath),
       url: grpcAddress(code),
+      loader: {
+        keepCase: true,
+      },
     },
   };
 };
