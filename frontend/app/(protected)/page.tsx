@@ -1,6 +1,6 @@
 "use client";
 
-import { Cpu, MemoryStick, HardDrive, Play, Square, AlertOctagon, Server, Network } from "lucide-react";
+import { Cpu, MemoryStick, HardDrive, Play, Square, AlertOctagon } from "lucide-react";
 import { motion } from "framer-motion";
 import { useDashboardData } from "@/hooks/use-dashboard-data";
 
@@ -62,11 +62,28 @@ export default function DashboardPage() {
       <section className="flex flex-col md:flex-row justify-between items-end gap-6">
         <div>
           <h2 className="text-4xl font-bold text-primary mb-2">Systems Overview</h2>
+
+        </div>
+        <div className="glass-card rounded-xl px-6 py-3 flex items-center gap-8 shrink-0">
           <div className="flex items-center gap-3">
-            <span className="w-2.5 h-2.5 rounded-full glow-dot-success" />
-            <span className="text-sm font-medium text-secondary-fixed-dim">
-              All systems operational &middot; SLA {data.uptime.sla} uptime
-            </span>
+            <span className="w-2 h-2 rounded-full glow-dot-success" />
+            <Play className="h-4 w-4 text-emerald-400" />
+            <span className="text-lg font-bold text-primary">{data.activeServices.running}</span>
+            <span className="text-xs text-on-surface-variant">Running</span>
+          </div>
+          <div className="w-px h-8 bg-white/10" />
+          <div className="flex items-center gap-3">
+            <span className="w-2 h-2 rounded-full bg-on-surface-variant/40" />
+            <Square className="h-4 w-4 text-on-surface-variant" />
+            <span className="text-lg font-bold text-primary">{data.activeServices.stopped}</span>
+            <span className="text-xs text-on-surface-variant">Stopped</span>
+          </div>
+          <div className="w-px h-8 bg-white/10" />
+          <div className="flex items-center gap-3">
+            <span className="w-2 h-2 rounded-full glow-dot-error" />
+            <AlertOctagon className="h-4 w-4 text-red-400" />
+            <span className="text-lg font-bold text-primary">{data.activeServices.failed}</span>
+            <span className="text-xs text-on-surface-variant">Failed</span>
           </div>
         </div>
       </section>
@@ -78,109 +95,7 @@ export default function DashboardPage() {
         <HealthGauge icon={HardDrive} label="Disk Storage" value={data.systemHealth.disk} unit="%" sublabel="Capacity: 2TB" subvalue={`${100 - data.systemHealth.disk}% Free`} index={2} />
       </section>
 
-      {/* Bottom row: services, network, nodes */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Services */}
-        <GlassCard index={3}>
-          <h4 className="text-sm font-semibold text-primary mb-5 flex items-center gap-2">
-            <Play className="h-4 w-4 text-secondary-fixed-dim" />
-            Active Services
-          </h4>
-          <div className="space-y-3">
-            {[
-              { icon: Play, label: "Running", value: data.activeServices.running, color: "text-emerald-400", glow: "glow-dot-success" },
-              { icon: Square, label: "Stopped", value: data.activeServices.stopped, color: "text-on-surface-variant", glow: "" },
-              { icon: AlertOctagon, label: "Failed", value: data.activeServices.failed, color: "text-red-400", glow: "glow-dot-error" },
-            ].map((s, i) => {
-              const Icon = s.icon;
-              return (
-                <div key={s.label} className="flex items-center gap-3">
-                  <span className={`w-2 h-2 rounded-full ${s.glow || "bg-on-surface-variant/40"}`} />
-                  <Icon className={`h-4 w-4 ${s.color}`} />
-                  <span className="flex-1 text-sm text-on-surface-variant">{s.label}</span>
-                  <span className="text-lg font-bold text-primary">{s.value}</span>
-                </div>
-              );
-            })}
-          </div>
-        </GlassCard>
 
-        {/* Network + Deployment Queue */}
-        <GlassCard index={4}>
-          <h4 className="text-sm font-semibold text-primary mb-5 flex items-center gap-2">
-            <Network className="h-4 w-4 text-secondary-fixed-dim" />
-            Network Traffic
-          </h4>
-          <div className="space-y-4">
-            <div>
-              <p className="text-xs text-on-surface-variant mb-1">Inbound</p>
-              <p className="text-2xl font-bold text-primary">{data.systemHealth.network.inbound}</p>
-            </div>
-            <div>
-              <p className="text-xs text-on-surface-variant mb-1">Outbound</p>
-              <p className="text-2xl font-bold text-primary">{data.systemHealth.network.outbound}</p>
-            </div>
-          </div>
-          <div className="mt-6 glass-card rounded-xl px-4 py-3 bg-linear-to-br from-secondary-container/20 to-transparent">
-            <div className="flex items-center gap-3 mb-2">
-              <Server className="h-4 w-4 text-secondary-fixed-dim" />
-              <span className="text-xs font-semibold text-primary">Security Pulse</span>
-            </div>
-            <p className="text-xs text-on-surface-variant leading-relaxed">
-              No unauthorized access detected in the last 72 hours.
-            </p>
-          </div>
-        </GlassCard>
-
-        {/* Nodes */}
-        <GlassCard index={5}>
-          <h4 className="text-sm font-semibold text-primary mb-5 flex items-center gap-2">
-            <Server className="h-4 w-4 text-secondary-fixed-dim" />
-            Nodes
-          </h4>
-          <div className="flex items-center gap-4 mb-4 text-xs">
-            <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full glow-dot-success" />
-              {data.nodes.filter(n => n.online).length} online
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-on-surface-variant/30" />
-              {data.nodes.filter(n => !n.online).length} offline
-            </span>
-          </div>
-          <div className="space-y-2">
-            {data.nodes.map((node, i) => (
-              <motion.div
-                key={node.id}
-                initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4 + 0.05 * i, duration: 0.25 }}
-                className="flex items-center gap-3 py-2 border-b border-white/5 last:border-0"
-              >
-                <Server className={`h-3.5 w-3.5 shrink-0 ${node.online ? "text-secondary-fixed-dim" : "text-on-surface-variant/30"}`} />
-                <span className={`flex-1 text-sm ${node.online ? "text-primary" : "text-on-surface-variant/40 line-through"}`}>
-                  {node.name}
-                </span>
-                {node.online ? (
-                  <div className="flex items-center gap-2">
-                    <div className="h-1 w-16 overflow-hidden rounded-full bg-white/5">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${node.load}%` }}
-                        transition={{ delay: 0.5 + 0.05 * i, duration: 0.5 }}
-                        className={`h-full rounded-full ${node.load < 50 ? "bg-secondary-container" : node.load < 80 ? "bg-yellow-400" : "bg-error"}`}
-                      />
-                    </div>
-                    <span className="w-8 text-right text-xs text-on-surface-variant">{node.load}%</span>
-                  </div>
-                ) : (
-                  <span className="text-xs text-on-surface-variant/40">Offline</span>
-                )}
-              </motion.div>
-            ))}
-          </div>
-        </GlassCard>
-      </div>
     </div>
   );
 }
