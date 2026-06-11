@@ -8,6 +8,7 @@ import {
   Settings,
   UserCircle,
   LogOut,
+  Plus,
   Rocket,
 } from "lucide-react";
 import Link from "next/link";
@@ -72,14 +73,14 @@ export function Sidebar() {
           );
         })}
 
-        {/* New Chat button */}
+        {/* New Project button */}
         <div className="mt-6 px-1">
           <Link
-            href="/conversations"
+            href="/projects/new"
             className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-on-primary shadow-xl transition-all hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] active:scale-95"
           >
-            <MessageSquare className="h-4 w-4" />
-            <span>New Chat</span>
+            <Plus className="h-4 w-4" />
+            <span>New Project</span>
           </Link>
         </div>
       </nav>

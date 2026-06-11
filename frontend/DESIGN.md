@@ -113,11 +113,12 @@ The palette uses a deep charcoal (`#111417`) with a pure white primary and a str
 - **Code:** JetBrains Mono for technical output.
 
 ## Layout & Spacing
-- **Sidebar:** Fixed 256px glass sidebar with rounded corners (`rounded-xl`), detached from the main viewport with `m-3` margin.
-- **Top Nav:** Fixed glass header with `padding-left: calc(16rem + 2rem)` to clear the sidebar.
-- **Content:** Pushed right by `ml-72` (sidebar width + margin), using `px-8` horizontal padding.
-- **Grid:** Main dashboard uses a 3-column bento grid for health gauges, with a 3-column bottom row for services, network, and nodes.
-- **Spacing:** Section spacing uses `gap-6` / `space-y-8`. Card padding is `p-6`.
+- **Sidebar:** Fixed 256px glass sidebar with rounded corners (`rounded-xl`), detached from the main viewport with `top-3 bottom-3 left-3` margins.
+- **Top Nav:** Fixed glass header with `rounded-xl`, positioned to the right of the sidebar.
+- **Content:** Full-width layout — no `max-width` constraints. Content fills all available space after the sidebar (`ml-72`) with `px-8` horizontal padding and `pt-20` top padding to clear the header.
+- **Grid:** Main dashboard uses a 3-column bento grid for health gauges. Sections stack vertically with `gap-6`.
+- **Spacing:** Section spacing uses `gap-6` / `space-y-8`. Card padding is `p-6` or `p-8` depending on density.
+- **Design Decision:** The main content area should always use the full available viewport width. Avoid `max-width` or `mx-auto` on page-level containers — let cards and grids expand naturally. This maximizes screen real estate for operational dashboards. Form pages (e.g. new project) may still use `max-w-lg` for readability since they are input-focused, not data-display focused.
 
 ## Elevation & Depth
 This design system uses **Glassmorphism** with atmospheric glow orbs behind the viewport.
@@ -147,6 +148,14 @@ This design system uses **Glassmorphism** with atmospheric glow orbs behind the 
 - **ICONS** lucide-react
 - **ANIMATION** framer-motion
 - **TABLE/LIST** tanstack table
+- **UI COMPONENTS** Custom-built in `components/ui/` — no third-party UI libraries
+
+## Architecture Decisions
+
+### Custom Components Over Libraries
+- All UI primitives (buttons, inputs, selects, modals) are custom-built in `components/ui/`.
+- **Do NOT use native HTML form elements** like `<select>` — every form control must be a custom animated component that matches the glass design language.
+- Custom components use `framer-motion` for dropdown animations (`AnimatePresence` + scale/fade transitions) and close on outside click via `useEffect` + `mousedown` listener.
 
 ## Architecture Decisions
 
