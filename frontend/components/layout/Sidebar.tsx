@@ -35,7 +35,7 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="glass-sidebar fixed left-0 top-0 z-50 flex h-dvh w-64 flex-col rounded-xl p-4 m-3 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]">
+    <aside className="glass-sidebar fixed left-3 top-3 bottom-3 z-50 flex w-64 flex-col rounded-xl p-4 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]">
       {/* Branding */}
       <div className="mb-8 flex items-center gap-3 px-2 py-1">
         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary-container shadow-[0_0_15px_rgba(5,102,217,0.4)]">

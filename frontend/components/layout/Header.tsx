@@ -43,8 +43,8 @@ export function Header() {
       initial={{ opacity: 0, y: -12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="glass-header fixed top-0 left-0 z-30 flex w-full items-center justify-between px-8 py-3"
-      style={{ paddingLeft: "calc(16rem + 2rem)" }}
+      className="glass-header fixed top-0 z-30 flex items-center justify-between px-8 py-3"
+      style={{ left: "calc(16rem + 0.75rem)", right: 0 }}
     >
       {/* Search */}
       <div className="relative flex items-center">
