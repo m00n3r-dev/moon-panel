@@ -53,15 +53,6 @@ function HealthGauge({ icon: Icon, label, value, unit, sublabel, subvalue, index
   );
 }
 
-function StatPill({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="text-center">
-      <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-0.5">{label}</p>
-      <p className="text-xl font-bold text-primary">{value}</p>
-    </div>
-  );
-}
-
 export default function DashboardPage() {
   const data = useDashboardData();
 
@@ -77,11 +68,6 @@ export default function DashboardPage() {
               All systems operational &middot; SLA {data.uptime.sla} uptime
             </span>
           </div>
-        </div>
-        <div className="glass-card rounded-xl px-6 py-4 flex items-center gap-8">
-          <StatPill label="Active Users" value="12,842" />
-          <div className="w-px h-10 bg-white/10" />
-          <StatPill label="Latency" value="24ms" />
         </div>
       </section>
 
