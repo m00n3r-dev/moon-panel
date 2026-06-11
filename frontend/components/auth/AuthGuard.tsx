@@ -1,15 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { apiClient } from "@/lib/api-client";
 import { AuthProvider, type User } from "@/lib/auth-context";
-
-const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-});
 
 type AuthState =
   | { status: "loading" }

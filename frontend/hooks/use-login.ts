@@ -3,10 +3,7 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-
-const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-});
+import { apiClient } from "@/lib/api-client";
 
 interface LoginInput {
   email: string;
