@@ -1,19 +1,17 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
-import { ClientsModule } from '@nestjs/microservices';
-import { buildClientModule } from '../lib/GrpHelper';
+import { AuthService } from './auth.service';
+import { JwtModule } from '@nestjs/jwt';
+import { getEnv } from '../lib/envHelper';
 
 @Module({
   imports: [
-    ClientsModule.register([
-      buildClientModule(
-        'AUTH_SERVICE',
-        'auth.v1',
-        'AUTH',
-        'auth/v1/auth.proto',
-      ),
-    ]),
+    JwtModule.register({
+      secret: getEnv('JWT_SECRET'),
+      signOptions: { expiresIn: '24h' },
+    }),
   ],
   controllers: [AuthController],
+  providers: [AuthService],
 })
 export class AuthModule {}
