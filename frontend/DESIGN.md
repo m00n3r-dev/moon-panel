@@ -1,53 +1,35 @@
 ---
-name: Celestial Control
+name: Nebula / Lumina
 colors:
-  surface: '#101415'
-  surface-dim: '#101415'
-  surface-bright: '#363a3b'
-  surface-container-lowest: '#0b0f10'
-  surface-container-low: '#191c1e'
-  surface-container: '#1d2022'
-  surface-container-high: '#272a2c'
-  surface-container-highest: '#323537'
-  on-surface: '#e0e3e5'
-  on-surface-variant: '#c1c7d3'
-  inverse-surface: '#e0e3e5'
-  inverse-on-surface: '#2d3133'
-  outline: '#8b919d'
-  outline-variant: '#414751'
-  surface-tint: '#a4c9ff'
-  primary: '#a4c9ff'
-  on-primary: '#00315d'
-  primary-container: '#60a5fa'
-  on-primary-container: '#003a6b'
-  inverse-primary: '#0060ac'
-  secondary: '#d0bcff'
-  on-secondary: '#3c0091'
-  secondary-container: '#571bc1'
-  on-secondary-container: '#c4abff'
-  tertiary: '#2fd9f4'
-  on-tertiary: '#00363e'
-  tertiary-container: '#00b2ca'
-  on-tertiary-container: '#003f48'
+  surface: '#111417'
+  surface-dim: '#111417'
+  surface-bright: '#37393d'
+  surface-container-lowest: '#0c0e12'
+  surface-container-low: '#191c1f'
+  surface-container: '#1d2023'
+  surface-container-high: '#282a2e'
+  surface-container-highest: '#323539'
+  on-surface: '#e1e2e7'
+  on-surface-variant: '#c4c7ca'
+  inverse-surface: '#e1e2e7'
+  inverse-on-surface: '#2e3134'
+  outline: '#8e9194'
+  outline-variant: '#44474a'
+  surface-tint: '#c1c7ce'
+  primary: '#ffffff'
+  on-primary: '#2b3136'
+  primary-container: '#dde3ea'
+  on-primary-container: '#5f656b'
+  inverse-primary: '#595f65'
+  secondary-container: '#0566d9'
+  on-secondary-container: '#e6ecff'
+  secondary-fixed-dim: '#adc6ff'
   error: '#ffb4ab'
   on-error: '#690005'
   error-container: '#93000a'
   on-error-container: '#ffdad6'
-  primary-fixed: '#d4e3ff'
-  primary-fixed-dim: '#a4c9ff'
-  on-primary-fixed: '#001c39'
-  on-primary-fixed-variant: '#004883'
-  secondary-fixed: '#e9ddff'
-  secondary-fixed-dim: '#d0bcff'
-  on-secondary-fixed: '#23005c'
-  on-secondary-fixed-variant: '#5516be'
-  tertiary-fixed: '#a2eeff'
-  tertiary-fixed-dim: '#2fd9f4'
-  on-tertiary-fixed: '#001f25'
-  on-tertiary-fixed-variant: '#004e5a'
-  background: '#101415'
-  on-background: '#e0e3e5'
-  surface-variant: '#323537'
+  background: '#05070a'
+  on-background: '#e1e2e7'
 typography:
   display-xl:
     fontFamily: Geist
@@ -110,53 +92,56 @@ spacing:
 ---
 
 ## Brand & Style
-The design system embodies a premium, futuristic server management experience. It is built for developers and infrastructure engineers who value precision and aesthetic excellence. The personality is "Astro-Modern"—a blend of deep-space serenity and high-performance technology.
+The design system embodies a premium, futuristic infrastructure management experience. The personality is "Nebula/Lumina"—a blend of deep-space atmosphere with high-tech, luminous glass elements.
 
-The aesthetic leans heavily into **Glassmorphism** and **2026 SaaS trends**, utilizing multi-layered translucency, ultra-fine borders, and rhythmic micro-interactions. The goal is to make server orchestration feel like navigating a high-end cockpit: calm, authoritative, and sophisticated. Every interface element is designed to minimize cognitive load while maximizing the sense of high-end quality and uptime reliability.
+The aesthetic is defined by **Glassmorphism** with `backdrop-filter: blur(20px)`, ultra-thin white borders (`rgba(255,255,255,0.1)`), and atmospheric background orbs. The goal is to make server orchestration feel like navigating a high-end starship cockpit: calm, authoritative, and sophisticated.
 
 ## Colors
-The palette is rooted in the "Deep Space" spectrum. 
-- **Primary (Moonlight Blue):** Used for primary actions, active states, and high-visibility status indicators.
-- **Secondary (Cosmic Purple):** Used for specialized features, AI-driven insights, and secondary brand accents.
-- **Tertiary (Soft Cyan):** Reserved for technical metrics, "safe" status updates, and interactive hints.
-- **Surface Strategy:** Backgrounds utilize a hierarchy of navy shades to create depth without relying on pure black. The primary background is `#050816`, while cards and panels use `#0B1020` with a subtle 1px border.
-- **Semantic Colors:** Success (Cyan), Warning (Amber), and Error (Crimson) are desaturated and glow-enhanced to fit the dark aesthetic.
+The palette uses a deep charcoal (`#111417`) with a pure white primary and a striking blue accent (`#0566d9`). 
+- **Primary:** Pure white (`#ffffff`) for headings and key text.
+- **Secondary Container (Blue):** `#0566d9` — used for active nav items, buttons, and accent glows.
+- **Secondary Fixed Dim:** `#adc6ff` — used for subtle highlights and status text.
+- **Surface Strategy:** Background is near-black (`#05070a`). Surface hierarchy ranges from `#0c0e12` (lowest) to `#323539` (highest).
+- **Semantic Colors:** Success (Emerald `#10b981`), Warning (Amber `#f59e0b`), Error (Red `#ef4444`) with glow effects (`box-shadow: 0 0 10px`).
+- **Glass:** Cards use `rgba(255,255,255,0.03)` with `backdrop-filter: blur(20px)` and `border: 1px solid rgba(255,255,255,0.1)`.
 
 ## Typography
-The typography system prioritizes technical clarity and modern "Geist" aesthetics. 
-- **Display and Headlines:** Use **Geist** for its tight tracking and technical, developer-centric feel. Large titles should use negative letter spacing to achieve a "Linear-style" high-end appearance.
-- **Body Text:** **Inter** is the workhorse for all prose and configuration descriptions, ensuring high legibility against dark backgrounds.
-- **Code:** **JetBrains Mono** is utilized for server logs, terminal outputs, and IP addresses to maintain the technical utility of the platform.
-- **Hierarchy:** Use variable font weights to distinguish between labels and values rather than relying solely on size or color.
+- **Display:** Geist, 64px, bold, tight letter spacing for large page titles.
+- **Headlines:** Inter, 40px/32px/24px, semi-bold with negative letter spacing.
+- **Body:** Inter, 16px, regular weight.
+- **Labels:** Geist, 14px/12px, medium weight, uppercase tracking for metadata.
+- **Code:** JetBrains Mono for technical output.
 
 ## Layout & Spacing
-The layout follows a **Fluid Grid** model with a heavy emphasis on "Safe Zones" and negative space to prevent the technical density from feeling overwhelming.
-
-- **Grid:** A 12-column grid system is used for the main dashboard. Sidebar navigation is fixed at 240px, while the content area expands.
-- **Rhythm:** Spacing follows a 4px base unit. Component internal padding should default to 16px (4 units) or 24px (6 units) for a spacious, premium feel.
-- **Mobile Adaptivity:** On mobile, columns collapse to a single stack. Horizontal scrolling is permitted only for wide data tables. Padding is reduced to 16px to maximize screen real estate for charts.
+- **Sidebar:** Fixed 256px glass sidebar with rounded corners (`rounded-xl`), detached from the main viewport with `m-3` margin.
+- **Top Nav:** Fixed glass header with `padding-left: calc(16rem + 2rem)` to clear the sidebar.
+- **Content:** Pushed right by `ml-72` (sidebar width + margin), using `px-8` horizontal padding.
+- **Grid:** Main dashboard uses a 3-column bento grid for health gauges, with a 3-column bottom row for services, network, and nodes.
+- **Spacing:** Section spacing uses `gap-6` / `space-y-8`. Card padding is `p-6`.
 
 ## Elevation & Depth
-This design system rejects traditional heavy shadows in favor of **Tonal Layering** and **Luminescence**.
+This design system uses **Glassmorphism** with atmospheric glow orbs behind the viewport.
 
-- **Glassmorphism:** Primary containers use a 12px backdrop-blur with a semi-transparent surface (`rgba(11, 16, 32, 0.6)`).
-- **Borders:** Depth is defined by 1px solid borders. Use a subtle gradient border (Top-Left to Bottom-Right) transitioning from `#ffffff1a` to `#ffffff05` to simulate a light source from above.
-- **Glows:** High-priority elements (Active Servers, Critical Alerts) use a "Soft Ambient Glow"—a drop shadow with a large blur (20-40px) and very low opacity (15%) using the primary or tertiary color hex.
+- **Glass Cards:** `background: rgba(255,255,255,0.03)` + `backdrop-filter: blur(20px)` + `border: 1px solid rgba(255,255,255,0.1)`. Cards lift on hover to `border-color: rgba(255,255,255,0.2)`.
+- **Glass Sidebar:** `background: rgba(17,20,23,0.4)` + `backdrop-filter: blur(40px)`. Floating sidebar with `box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3)`.
+- **Glass Header:** `background: rgba(17,20,23,0.6)` + `backdrop-filter: blur(20px)`.
+- **Background Orbs:** Two large blur-radial gradients positioned in the background (`bg-orb-primary` at top-left, `bg-orb-tertiary` at right-center).
+- **Glows:** Active nav items get `box-shadow: 0 0 15px rgba(5,102,217,0.3)`. Status dots use `box-shadow: 0 0 10px` in their semantic color.
 
 ## Shapes
-The shape language is "Squircle-Adjacent"—rounded enough to feel modern and friendly, but sharp enough to feel like a professional tool. 
-
-- **Standard Elements:** Buttons and input fields use a `0.5rem` radius. 
-- **Large Containers:** Dashboard cards and modals use `1rem` (rounded-lg) to soften the layout.
-- **Status Indicators:** Use fully pill-shaped (rounded-full) geometry for tags and status chips to distinguish them from interactive buttons.
+- **Cards:** `rounded-2xl` (16px) for dashboard health gauges and bento grid items.
+- **Sidebar:** `rounded-xl` (12px) with floating detached appearance.
+- **Buttons:** `rounded-lg` (8px) for standard buttons, `rounded-full` for icon buttons.
+- **Input:** `rounded-full` for the search bar.
+- **Status indicators:** Small dots (`w-2 h-2 rounded-full`) with glow shadows.
 
 ## Components
-- **Buttons:** Primary buttons feature a subtle "Moonlight" gradient. Secondary buttons are "Ghost" style with a 1px border that brightens on hover.
-- **Input Fields:** Backgrounds are slightly darker than the surface they sit on. The focus state is a Soft Cyan border with a 2px outer glow.
-- **Cards:** Must feature the standard backdrop-blur. Headers within cards should have a subtle separator line with 10% opacity.
-- **Server Chips:** Use a pulsing 8px dot to indicate live status. The color of the dot corresponds to the health of the node (Cyan = Good, Amber = Loaded, Crimson = Down).
-- **Data Visualizations:** Charts should use primary and tertiary colors with area gradients that fade to transparent. Grid lines in charts should be kept to a minimum (maximum 3-4 horizontal lines) to maintain cleanliness.
-- **Progress Bars:** Thin (4px) with a glowing leading edge to signify "active energy" or data transfer.
+- **Sidebar:** Glass floating sidebar (`glass-sidebar` class). Rocket icon in a `bg-secondary-container` box with blue glow. Active nav item uses `bg-secondary-container` with `text-on-secondary-container`. Inactive items use `text-on-surface-variant` with `hover:bg-white/10`.
+- **Header:** Glass top navbar with search input (rounded-full, `bg-white/5`), notification/settings icon buttons, and avatar with dropdown.
+- **Cards:** `glass-card` class with hover lift and blue glow orb in the bottom-right corner.
+- **Health Gauges:** Large bold value (text-3xl) with label + thin progress bar (`h-1.5`) with `shadow-[0_0_8px_rgba(5,102,217,0.5)]` on the filled portion.
+- **Progress Bars:** Color-coded: `bg-secondary-container` (<60%), `bg-yellow-400` (<85%), `bg-error` (>=85%).
+- **Status Dots:** `glow-dot-success` (emerald), `glow-dot-error` (red), `glow-dot-warning` (amber), `glow-dot-blue` (blue accent).
 
 ## Libraries
 - **ICONS** lucide-react
