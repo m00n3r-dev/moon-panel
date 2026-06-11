@@ -1,35 +1,23 @@
-import { Body, Controller, Inject, OnModuleInit, Post } from '@nestjs/common';
-import type { ClientGrpc } from '@nestjs/microservices';
-import { AuthServiceClient } from './types';
-import { firstValueFrom } from 'rxjs';
+import { Body, Controller, Post } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
 import { ValidateTokenDto } from './dto/validate-token.dto';
+import { AuthService } from './auth.service';
 
 @Controller('api/auth')
-export class AuthController implements OnModuleInit {
-  @Inject('AUTH_SERVICE') private client!: ClientGrpc;
-  private authService!: AuthServiceClient;
-
-  onModuleInit() {
-    this.authService = this.client.getService<AuthServiceClient>('AuthService');
-  }
+export class AuthController {
+  constructor(private authService: AuthService) {}
 
   @Post('login')
   async login(@Body() data: LoginDto) {
-    return await firstValueFrom(this.authService.Login(data));
-  }
-
-  @Post('register')
-  async register(
-    @Body()
-    data: RegisterDto,
-  ) {
-    return await firstValueFrom(this.authService.Register(data));
+    const token = await this.authService.login(data.email, data.password);
+    if (!token) {
+      return { error: 'Invalid credentials' };
+    }
+    return { token: token };
   }
 
   @Post('validate-token')
   async validateToken(@Body() data: ValidateTokenDto) {
-    return await firstValueFrom(this.authService.ValidateToken(data));
+    return await this.authService.validateToken(data.jwt_token);
   }
 }
