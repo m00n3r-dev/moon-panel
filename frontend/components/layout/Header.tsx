@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Bell, ChevronDown, LogOut, Search, Settings, UserCircle } from "lucide-react";
+import { Bell, ChevronDown, LogOut, Settings, UserCircle } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "@/lib/auth-context";
@@ -43,19 +43,9 @@ export function Header() {
       initial={{ opacity: 0, y: -12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="glass-header fixed top-3 z-30 flex items-center justify-between rounded-xl px-6 py-2.5 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]"
+      className="glass-header fixed top-3 z-30 flex items-center justify-end rounded-xl px-6 py-2.5 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]"
       style={{ left: "calc(16rem + 1.5rem)", right: "0.75rem" }}
     >
-      {/* Search */}
-      <div className="relative flex items-center">
-        <Search className="absolute left-3 h-4 w-4 text-on-surface-variant" />
-        <input
-          type="text"
-          placeholder="Quick search..."
-          className="w-64 rounded-full bg-white/5 py-1.5 pl-10 pr-4 text-sm text-on-surface outline-none placeholder:text-on-surface-variant/50 transition-all focus:bg-white/10"
-        />
-      </div>
-
       {/* Right side */}
       <div className="flex items-center gap-4">
         <button className="flex h-8 w-8 items-center justify-center rounded-full text-on-surface-variant transition-all hover:bg-white/5 hover:text-primary">
