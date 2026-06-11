@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../lib/PrismaService';
-import { Prisma, User } from '../generated/prisma/client';
+import { User } from '../generated/prisma/client';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
