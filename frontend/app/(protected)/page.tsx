@@ -66,7 +66,7 @@ export default function DashboardPage() {
   const data = useDashboardData();
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8">
+    <div className="space-y-8">
       {/* Header section */}
       <section className="flex flex-col md:flex-row justify-between items-end gap-6">
         <div>
