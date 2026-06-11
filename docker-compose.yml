@@ -15,42 +15,32 @@ services:
     volumes:
       - moon-panel-data:/var/lib/postgresql/data
 
-  bff:
-    build:
-      context: .
-      dockerfile: bff/Dockerfile
-    depends_on:
-      auth:
-        condition: service_started
-    environment:
-      GRPC_AUTH_ADDRESS: "auth:${AUTH_SERVICE_GRPC_PORT}"
-      AUTH_PROTO_PATH: "/app/proto/auth/v1/auth.proto"
-      PORT: 3001
-    ports:
-      - "3001:3001"
+  # bff:
+  #   build:
+  #     context: .
+  #     dockerfile: bff/Dockerfile
+  #   depends_on:
+  #     auth:
+  #       condition: service_started
+  #   environment:
+  #     GRPC_AUTH_ADDRESS: "auth:${AUTH_SERVICE_GRPC_PORT}"
+  #     AUTH_PROTO_PATH: "/app/proto/auth/v1/auth.proto"
+  #     PORT: 3001
+  #   ports:
+  #     - "3001:3001"
 
   # MICRO SERVICES
-  auth:
-    build: services/auth
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      DATABASE_URL: "${DATABASE_URL}"
-      JWT_SECRET: "${JWT_SECRET}"
-      GRPC_PORT: "${AUTH_SERVICE_GRPC_PORT}"
-    ports:
-      - "${AUTH_SERVICE_GRPC_PORT}:${AUTH_SERVICE_GRPC_PORT}"
-
-  migrate:
-    image: migrate/migrate
-    depends_on:
-      postgres:
-        condition: service_healthy
-    volumes:
-      - ./migrations:/migrations
-    command: ["-path", "/migrations", "-database", "${DATABASE_URL}", "up"]
-    profiles: ["setup"]
+  # auth:
+  #   build: services/auth
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #   environment:
+  #     DATABASE_URL: "${DATABASE_URL}"
+  #     JWT_SECRET: "${JWT_SECRET}"
+  #     GRPC_PORT: "${AUTH_SERVICE_GRPC_PORT}"
+  #   ports:
+  #     - "${AUTH_SERVICE_GRPC_PORT}:${AUTH_SERVICE_GRPC_PORT}"
 
 volumes:
   moon-panel-data:
