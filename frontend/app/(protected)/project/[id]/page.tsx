@@ -1,8 +1,7 @@
 "use client";
 
 import { ArrowLeft, Globe, Rocket, Server } from "lucide-react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { LogTerminal, type LogEntry } from "@/components/ui/LogTerminal";
 import { ResourceUsage } from "@/components/project/ResourceUsage";
 
@@ -22,20 +21,18 @@ const mockLogs: LogEntry[] = [
 
 export default function ProjectViewPage() {
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
 
   return (
     <div className="space-y-8">
-      {/* Back link */}
-      <Link
-        href="/"
-        className="inline-flex items-center gap-1.5 text-sm text-on-surface-variant transition-colors hover:text-primary"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to Dashboard
-      </Link>
-
-      {/* Header */}
+      {/* Header with back button */}
       <div className="flex items-center gap-4">
+        <button
+          onClick={() => router.push("/")}
+          className="flex h-14 w-14 items-center justify-center rounded-xl bg-surface-container text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-primary"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </button>
         <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-secondary-container shadow-[0_0_15px_rgba(5,102,217,0.4)]">
           <Rocket className="h-7 w-7 text-white" />
         </div>
