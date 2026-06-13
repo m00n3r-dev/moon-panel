@@ -2,6 +2,7 @@
 
 import { Cpu, MemoryStick, HardDrive, Play, Square, AlertOctagon, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { useDashboardData } from "@/hooks/use-dashboard-data";
 
 const projects = [
@@ -111,7 +112,7 @@ export default function DashboardPage() {
       <section>
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-sm font-semibold text-primary">Recent Projects</h3>
-          <button className="text-xs text-secondary-fixed-dim hover:text-primary transition-colors">View All</button>
+          <Link href="/projects" className="text-xs text-secondary-fixed-dim hover:text-primary transition-colors">View All</Link>
         </div>
         <div className="space-y-3">
           {projects.map((project, index) => {
