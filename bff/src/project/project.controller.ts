@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Query, Res } from '@nestjs/common';
 import { CreateProjectDto } from './dto/CreateProjectDto';
 import { ProjectService } from './project.service';
 import type { Response } from 'express';
@@ -8,8 +8,18 @@ export class ProjectController {
   constructor(private projectService: ProjectService) {}
 
   @Get('list')
-  async listProjects() {
-    return this.projectService.findAll();
+  async listProjects(
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+    @Query('search') search?: string,
+    @Query('status') status?: string,
+  ) {
+    return this.projectService.findAllPaginated({
+      page: Math.max(1, parseInt(page ?? '1', 10)),
+      limit: Math.min(100, Math.max(1, parseInt(limit ?? '12', 10))),
+      search,
+      status: status && status !== 'all' ? status : undefined,
+    });
   }
 
   @Get(':id')

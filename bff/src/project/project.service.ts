@@ -16,10 +16,32 @@ function extractDomain(url: string): string {
 export class ProjectService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(): Promise<Project[]> {
-    return this.prisma.project.findMany({
-      orderBy: { updatedAt: 'desc' },
-    });
+  async findAllPaginated(params: { page: number; limit: number; search?: string; status?: string }) {
+    const { page, limit, search, status } = params;
+    const skip = (page - 1) * limit;
+
+    const where: any = {};
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' as const } },
+        { domain: { contains: search, mode: 'insensitive' as const } },
+      ];
+    }
+    if (status) {
+      where.status = status;
+    }
+
+    const [data, total] = await Promise.all([
+      this.prisma.project.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { updatedAt: 'desc' },
+      }),
+      this.prisma.project.count({ where }),
+    ]);
+
+    return { data, total, page, limit, totalPages: Math.ceil(total / limit) };
   }
 
   async findById(id: string): Promise<Project> {
