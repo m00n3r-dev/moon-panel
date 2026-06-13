@@ -9,7 +9,7 @@ export default function NewProjectPage() {
   const router = useRouter();
 
   return (
-    <div className="mx-auto max-w-lg space-y-6">
+    <div className="space-y-8">
       {/* Header with back button */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
@@ -28,8 +28,8 @@ export default function NewProjectPage() {
           <Rocket className="h-5 w-5 text-white" />
         </div>
         <div>
-          <h1 className="text-lg font-bold text-primary">New Project</h1>
-          <p className="text-xs text-on-surface-variant">
+          <h1 className="text-2xl font-bold text-primary">New Project</h1>
+          <p className="text-sm text-on-surface-variant">
             Configure your project details
           </p>
         </div>
