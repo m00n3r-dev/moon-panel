@@ -6,16 +6,17 @@ import {
   useReactTable,
   createColumnHelper,
 } from "@tanstack/react-table";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   ExternalLink,
   Server,
   Globe,
-  Activity,
 } from "lucide-react";
 import Link from "next/link";
+import { useState, useRef, useEffect } from "react";
 import { type ProjectRow } from "@/hooks/use-projects-table";
 
 const statusStyles: Record<string, { dot: string; text: string; bg: string }> = {
@@ -45,6 +46,63 @@ function typeLabel(s: string) {
     case "reverse-proxy": return "Reverse Proxy";
     default: return s;
   }
+}
+
+function LimitSelect({
+  value,
+  onChange,
+}: {
+  value: number;
+  onChange: (v: number) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const options = [10, 20, 50, 100];
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    if (open) document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((p) => !p)}
+        className="flex cursor-pointer items-center gap-1.5 rounded-md border border-white/5 bg-surface-container-high px-2.5 py-1.5 text-xs text-on-surface outline-none transition-all hover:border-white/10 hover:bg-surface-container"
+      >
+        {value}
+        <ChevronDown className={`h-3 w-3 text-on-surface-variant/60 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -4, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -4, scale: 0.97 }}
+            transition={{ duration: 0.12, ease: "easeOut" }}
+            className="absolute left-0 top-full z-50 mt-1 min-w-20 overflow-hidden rounded-lg border border-white/10 bg-surface py-1 shadow-xl backdrop-blur-2xl"
+          >
+            {options.map((opt) => (
+              <button
+                key={opt}
+                type="button"
+                onClick={() => { onChange(opt); setOpen(false); }}
+                className={`flex w-full cursor-pointer items-center px-3 py-1.5 text-xs text-left transition-colors hover:bg-white/5 ${
+                  opt === value ? "text-secondary-fixed-dim" : "text-on-surface-variant"
+                }`}
+              >
+                {opt}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
 }
 
 function timeAgo(dateStr: string): string {
@@ -145,8 +203,8 @@ export function ProjectsTable({
   });
 
   return (
-    <div className="glass-card rounded-2xl overflow-hidden">
-      <div className="overflow-x-auto">
+    <div className="glass-card rounded-2xl">
+      <div className="overflow-x-auto rounded-t-2xl">
         <table className="w-full">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -205,18 +263,10 @@ export function ProjectsTable({
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between gap-4 border-t border-white/5 px-5 py-3.5">
+      <div className="relative flex items-center justify-between gap-4 border-t border-white/5 px-5 py-3.5 overflow-visible">
         <div className="flex items-center gap-2">
           <span className="text-xs text-on-surface-variant/60">Rows per page</span>
-          <select
-            value={limit}
-            onChange={(e) => onLimitChange(Number(e.target.value))}
-            className="rounded-md border border-white/5 bg-surface-container-high px-2 py-1 text-xs text-on-surface outline-none focus:border-secondary-container/40"
-          >
-            {[6, 12, 24, 48].map((n) => (
-              <option key={n} value={n}>{n}</option>
-            ))}
-          </select>
+          <LimitSelect value={limit} onChange={onLimitChange} />
         </div>
 
         <div className="flex items-center gap-3">
