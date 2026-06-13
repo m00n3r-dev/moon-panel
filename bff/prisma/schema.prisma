@@ -30,6 +30,8 @@ model Project {
   type      String
   version   Int
   url       String
+  domain    String   @default("")
+  status    String   @default("live")
   cpu       Float    @default(0)
   memory    Float    @default(0)
   storage   Float    @default(0)

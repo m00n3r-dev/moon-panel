@@ -1,9 +1,12 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import { apiClient } from "@/lib/api-client";
+
 export interface Project {
   id: string;
   name: string;
-  status: "Live" | "Syncing" | "Offline" | "Error";
+  status: "live" | "syncing" | "offline" | "error";
   type: string;
   url: string;
   uptime: string;
@@ -11,68 +14,57 @@ export interface Project {
   domain: string;
 }
 
-export function useProjects(): Project[] {
-  // TODO: Replace with React Query query once the API is ready
-  return [
-    {
-      id: "proj_001",
-      name: "Project Alpha-Global",
-      status: "Live",
-      type: "Node.js",
-      url: "https://alpha-global.example.com",
-      uptime: "99.98%",
-      lastDeployed: "2 hours ago",
-      domain: "alpha-global.example.com",
+interface ProjectRow {
+  id: string;
+  name: string;
+  status: string;
+  type: string;
+  version: number;
+  url: string;
+  domain: string;
+  cpu: number;
+  memory: number;
+  storage: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+function timeAgo(dateStr: string): string {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins} min ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days} day${days > 1 ? "s" : ""} ago`;
+  return `${Math.floor(days / 30)} month${days >= 60 ? "s" : ""} ago`;
+}
+
+function mapProject(row: ProjectRow): Project {
+  return {
+    id: row.id,
+    name: row.name,
+    status: (["live", "syncing", "offline", "error"].includes(row.status)
+      ? row.status
+      : "live") as Project["status"],
+    type: row.type === "nodejs" ? "Node.js"
+      : row.type === "php" ? "PHP"
+      : row.type === "reverse-proxy" ? "Reverse Proxy"
+      : row.type,
+    url: row.url,
+    domain: row.domain || new URL(row.url).hostname,
+    uptime: "—",
+    lastDeployed: timeAgo(row.updatedAt),
+  };
+}
+
+export function useProjects() {
+  return useQuery({
+    queryKey: ["projects"],
+    queryFn: async () => {
+      const { data } = await apiClient.get<ProjectRow[]>("/api/project/list");
+      return data.map(mapProject);
     },
-    {
-      id: "proj_002",
-      name: "Nebula-ML Core",
-      status: "Syncing",
-      type: "PHP",
-      url: "https://nebula-ml.example.com",
-      uptime: "99.92%",
-      lastDeployed: "15 min ago",
-      domain: "nebula-ml.example.com",
-    },
-    {
-      id: "proj_003",
-      name: "API Gateway",
-      status: "Live",
-      type: "Reverse Proxy",
-      url: "https://api-gateway.example.com",
-      uptime: "99.99%",
-      lastDeployed: "1 day ago",
-      domain: "api-gateway.example.com",
-    },
-    {
-      id: "proj_004",
-      name: "Archived Repository",
-      status: "Offline",
-      type: "Node.js",
-      url: "https://archive.example.com",
-      uptime: "—",
-      lastDeployed: "12 days ago",
-      domain: "archive.example.com",
-    },
-    {
-      id: "proj_005",
-      name: "Auth Service",
-      status: "Live",
-      type: "Node.js",
-      url: "https://auth.example.com",
-      uptime: "99.97%",
-      lastDeployed: "4 hours ago",
-      domain: "auth.example.com",
-    },
-    {
-      id: "proj_006",
-      name: "Legacy CMS",
-      status: "Error",
-      type: "PHP",
-      url: "https://cms.example.com",
-      uptime: "95.3%",
-      lastDeployed: "3 days ago",
-      domain: "cms.example.com",
-    },
-  ];
+  });
 }

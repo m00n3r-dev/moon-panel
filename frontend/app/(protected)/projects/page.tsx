@@ -15,25 +15,25 @@ import { useState, useMemo } from "react";
 import { useProjects, type Project } from "@/hooks/use-projects";
 
 const statusConfig = {
-  Live: {
+  live: {
     dot: "glow-dot-success",
     bg: "bg-emerald-500/10",
     border: "border-emerald-500/20",
     text: "text-emerald-400",
   },
-  Syncing: {
+  syncing: {
     dot: "glow-dot-blue",
     bg: "bg-secondary-container/10",
     border: "border-secondary-container/20",
     text: "text-secondary-fixed-dim",
   },
-  Offline: {
+  offline: {
     dot: "",
     bg: "bg-white/5",
     border: "border-white/10",
     text: "text-on-surface-variant",
   },
-  Error: {
+  error: {
     dot: "glow-dot-error",
     bg: "bg-error/10",
     border: "border-error/20",
@@ -47,7 +47,11 @@ const typeIcons: Record<string, React.ElementType> = {
   "Reverse Proxy": ExternalLink,
 };
 
-const statusFilters = ["All", "Live", "Syncing", "Offline", "Error"] as const;
+function statusLabel(status: string): string {
+  return status.charAt(0).toUpperCase() + status.slice(1);
+}
+
+const statusFilters = ["All", "live", "syncing", "offline", "error"] as const;
 type StatusFilter = (typeof statusFilters)[number];
 
 function ProjectCard({
@@ -76,7 +80,7 @@ function ProjectCard({
             <span
               className={`h-1.5 w-1.5 rounded-full ${style.dot || "bg-on-surface-variant"}`}
             />
-            {project.status}
+            {statusLabel(project.status)}
           </span>
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-surface-container-high text-on-surface-variant transition-colors group-hover:bg-secondary-container/10 group-hover:text-secondary-fixed-dim">
             <TypeIcon className="h-3.5 w-3.5" />
@@ -108,7 +112,7 @@ function ProjectCard({
 }
 
 export default function ProjectsPage() {
-  const projects = useProjects();
+  const { data: projects = [], isLoading, error } = useProjects();
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState<StatusFilter>("All");
 
@@ -177,7 +181,7 @@ export default function ProjectsPage() {
                   : "text-on-surface-variant hover:text-on-surface border border-transparent"
               }`}
             >
-              {filter}
+              {filter === "All" ? "All" : statusLabel(filter)}
             </button>
           ))}
         </div>
@@ -193,7 +197,45 @@ export default function ProjectsPage() {
         {search && ` matching "${search}"`}
       </motion.p>
 
-      {filtered.length > 0 ? (
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.06 * i, duration: 0.35 }}
+              className="glass-card rounded-2xl p-6"
+            >
+              <div className="flex items-start justify-between mb-4">
+                <div className="h-5 w-16 animate-pulse rounded-full bg-white/5" />
+                <div className="h-7 w-7 animate-pulse rounded-lg bg-white/5" />
+              </div>
+              <div className="h-5 w-3/4 animate-pulse rounded bg-white/5 mb-2" />
+              <div className="h-3 w-1/2 animate-pulse rounded bg-white/5" />
+              <div className="my-4 h-px bg-white/5" />
+              <div className="flex justify-between">
+                <div className="h-3 w-16 animate-pulse rounded bg-white/5" />
+                <div className="h-3 w-20 animate-pulse rounded bg-white/5" />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      ) : error ? (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="glass-card rounded-2xl p-12 text-center"
+        >
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-error/10">
+            <Search className="h-6 w-6 text-error" />
+          </div>
+          <h3 className="text-lg font-semibold text-primary">Failed to load projects</h3>
+          <p className="mt-1 text-sm text-on-surface-variant">
+            {error instanceof Error ? error.message : "An unexpected error occurred"}
+          </p>
+        </motion.div>
+      ) : filtered.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} />
