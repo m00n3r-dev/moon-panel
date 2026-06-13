@@ -3,6 +3,21 @@
 import { ArrowLeft, Globe, Rocket, Server } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { LogTerminal, type LogEntry } from "@/components/ui/LogTerminal";
+
+const mockLogs: LogEntry[] = [
+  { timestamp: "2026-06-13 14:23:01", level: "info", message: "Project created successfully" },
+  { timestamp: "2026-06-13 14:23:02", level: "info", message: "Cloning repository..." },
+  { timestamp: "2026-06-13 14:23:04", level: "success", message: "Repository cloned (main branch)" },
+  { timestamp: "2026-06-13 14:23:04", level: "info", message: "Installing dependencies..." },
+  { timestamp: "2026-06-13 14:23:12", level: "info", message: "Dependencies installed (42 packages)" },
+  { timestamp: "2026-06-13 14:23:12", level: "info", message: "Building project..." },
+  { timestamp: "2026-06-13 14:23:28", level: "success", message: "Build completed successfully" },
+  { timestamp: "2026-06-13 14:23:28", level: "info", message: "Deploying to production..." },
+  { timestamp: "2026-06-13 14:23:31", level: "success", message: "Deployment live at https://my-app.example.com" },
+  { timestamp: "2026-06-13 14:23:32", level: "info", message: "Running health check..." },
+  { timestamp: "2026-06-13 14:23:35", level: "success", message: "Health check passed (200 OK)" },
+];
 
 export default function ProjectViewPage() {
   const { id } = useParams<{ id: string }>();
@@ -67,6 +82,9 @@ export default function ProjectViewPage() {
           </div>
         </div>
       </div>
+
+      {/* Log terminal */}
+      <LogTerminal logs={mockLogs} title="Deployment Logs" />
     </div>
   );
 }
