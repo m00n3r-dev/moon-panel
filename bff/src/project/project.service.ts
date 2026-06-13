@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { Project } from '../generated/prisma/client';
 import { PrismaService } from '../lib/PrismaService';
@@ -8,7 +8,21 @@ import { CreateProjectDto } from './dto/CreateProjectDto';
 export class ProjectService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createProject(data: CreateProjectDto): Promise<Project> {
+  async create(data: CreateProjectDto): Promise<Project> {
+    const nameExists = await this.prisma.project.findFirst({
+      where: { name: data.name },
+    });
+    if (nameExists) {
+      throw new ConflictException('Project name already exists!');
+    }
+
+    const urlExists = await this.prisma.project.findFirst({
+      where: { url: data.url },
+    });
+    if (urlExists) {
+      throw new ConflictException('Project url already exists!');
+    }
+
     return await this.prisma.project.create({
       data: {
         id: randomUUID(),

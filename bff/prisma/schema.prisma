@@ -26,12 +26,14 @@ model User {
 
 model Project {
   id        String   @id
-  name      String   @unique
+  name      String
   type      String
   version   Int
-  url       String   @unique
+  url       String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@unique([name])
+  @@unique([url])
   @@map("projects")
 }

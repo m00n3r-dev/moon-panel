@@ -9,7 +9,7 @@ export class ProjectController {
 
   @Post('create')
   async createProject(@Body() data: CreateProjectDto, @Res() res: Response) {
-    const project = await this.projectService.createProject(data);
+    const project = await this.projectService.create(data);
     return res
       .status(HttpStatus.CREATED)
       .json({ message: 'project created successfully', id: project.id });
