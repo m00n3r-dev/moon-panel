@@ -5,7 +5,7 @@ import { AuthService } from './auth.service';
 import type { Response } from 'express';
 import { Public } from './decorators/public.decorator';
 
-@Controller('api/auth')
+@Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 

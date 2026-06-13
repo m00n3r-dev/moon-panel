@@ -1,4 +1,4 @@
-import { IsIn, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsIn, IsNotEmpty, IsNumber, IsString, IsUrl } from 'class-validator';
 
 export class CreateProjectDto {
   @IsString()
@@ -13,7 +13,7 @@ export class CreateProjectDto {
   @IsNotEmpty()
   version: number;
 
-  @IsString()
+  @IsUrl()
   @IsNotEmpty()
   url: string;
 }
