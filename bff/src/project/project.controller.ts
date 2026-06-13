@@ -1,6 +1,17 @@
-import { Controller, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '../auth/auth.guard';
+import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import { CreateProjectDto } from './dto/CreateProjectDto';
+import { ProjectService } from './project.service';
+import type { Response } from 'express';
 
 @Controller('project')
-@UseGuards(AuthGuard)
-export class ProjectController {}
+export class ProjectController {
+  constructor(private projectService: ProjectService) {}
+
+  @Post('create')
+  async createProject(@Body() data: CreateProjectDto, @Res() res: Response) {
+    const project = await this.projectService.createProject(data);
+    return res
+      .status(HttpStatus.CREATED)
+      .json({ message: 'project created successfully', id: project.id });
+  }
+}
