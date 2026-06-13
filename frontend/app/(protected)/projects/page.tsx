@@ -69,7 +69,6 @@ function ProjectCard({
         whileHover={{ y: -3, transition: { duration: 0.2 } }}
         className="glass-card rounded-2xl p-6 group cursor-pointer h-full"
       >
-        {/* Top: status + type badge */}
         <div className="flex items-start justify-between mb-4">
           <span
             className={`flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-tighter ${style.bg} ${style.border} border ${style.text}`}
@@ -84,20 +83,15 @@ function ProjectCard({
           </div>
         </div>
 
-        {/* Name */}
         <h3 className="text-base font-semibold text-primary truncate">
           {project.name}
         </h3>
-
-        {/* Domain */}
         <p className="mt-0.5 text-xs text-on-surface-variant truncate">
           {project.domain}
         </p>
 
-        {/* Divider */}
         <div className="my-4 h-px bg-white/5" />
 
-        {/* Stats row */}
         <div className="flex items-center justify-between text-xs text-on-surface-variant">
           <div className="flex items-center gap-1.5">
             <Activity className="h-3.5 w-3.5 text-emerald-400" />
@@ -134,7 +128,6 @@ export default function ProjectsPage() {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -156,14 +149,12 @@ export default function ProjectsPage() {
         </Link>
       </motion.div>
 
-      {/* Search + Filters */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.08, duration: 0.3 }}
         className="flex flex-col sm:flex-row gap-4"
       >
-        {/* Search */}
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-on-surface-variant/60" />
           <input
@@ -175,7 +166,6 @@ export default function ProjectsPage() {
           />
         </div>
 
-        {/* Status filter */}
         <div className="flex items-center gap-1.5 flex-wrap">
           {statusFilters.map((filter) => (
             <button
@@ -193,7 +183,6 @@ export default function ProjectsPage() {
         </div>
       </motion.div>
 
-      {/* Project count */}
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -204,7 +193,6 @@ export default function ProjectsPage() {
         {search && ` matching "${search}"`}
       </motion.p>
 
-      {/* Project grid */}
       {filtered.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((project, index) => (
