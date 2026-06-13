@@ -1,4 +1,4 @@
-import { IsIn, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsIn, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateProjectDto {
   @IsString()
@@ -16,4 +16,16 @@ export class CreateProjectDto {
   @IsString()
   @IsNotEmpty()
   url: string;
+
+  @IsNumber()
+  @IsOptional()
+  cpu?: number;
+
+  @IsNumber()
+  @IsOptional()
+  memory?: number;
+
+  @IsNumber()
+  @IsOptional()
+  storage?: number;
 }

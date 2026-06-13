@@ -30,6 +30,9 @@ export class ProjectService {
         type: data.type,
         version: data.version,
         url: data.url,
+        cpu: data.cpu ?? 0,
+        memory: data.memory ?? 0,
+        storage: data.storage ?? 0,
       },
     });
   }
