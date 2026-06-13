@@ -174,6 +174,7 @@ export function CreateProjectForm() {
   const errors: Record<string, string> = {};
   if (touched.name && !name.trim()) errors.name = "Project name is required";
   if (touched.url && !url.trim()) errors.url = "URL is required";
+  if (touched.url && url.trim() && !/^https?:\/\/.+/.test(url.trim())) errors.url = "Enter a valid URL (e.g. https://example.com)";
 
   function handleTypeChange(nextType: string) {
     setType(nextType);
@@ -209,12 +210,15 @@ export function CreateProjectForm() {
             <input
               id="name"
               type="text"
-              required
               placeholder="my-awesome-app"
               value={name}
               onChange={(event) => setName(event.target.value)}
               onBlur={() => setTouched((prev) => ({ ...prev, name: true }))}
-              className="w-full rounded-lg border border-white/5 bg-white/5 px-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant/40 outline-none transition-all focus:border-secondary-container/40 focus:bg-white/10 focus:shadow-[0_0_12px_rgba(5,102,217,0.15)] focus:ring-1 focus:ring-secondary-container/50"
+              className={`w-full rounded-lg border px-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant/40 outline-none transition-all focus:bg-white/10 focus:shadow-[0_0_12px_rgba(5,102,217,0.15)] focus:ring-1 focus:ring-secondary-container/50 ${
+                errors.name
+                  ? "border-error/50 bg-error/5 focus:border-error/50 focus:ring-error/30"
+                  : "border-white/5 bg-white/5 focus:border-secondary-container/40"
+              }`}
             />
           </FormField>
 
@@ -222,12 +226,15 @@ export function CreateProjectForm() {
             <input
               id="url"
               type="url"
-              required
               placeholder="https://my-app.example.com"
               value={url}
               onChange={(event) => setUrl(event.target.value)}
               onBlur={() => setTouched((prev) => ({ ...prev, url: true }))}
-              className="w-full rounded-lg border border-white/5 bg-white/5 px-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant/40 outline-none transition-all focus:border-secondary-container/40 focus:bg-white/10 focus:shadow-[0_0_12px_rgba(5,102,217,0.15)] focus:ring-1 focus:ring-secondary-container/50"
+              className={`w-full rounded-lg border px-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant/40 outline-none transition-all focus:bg-white/10 focus:shadow-[0_0_12px_rgba(5,102,217,0.15)] focus:ring-1 focus:ring-secondary-container/50 ${
+                errors.url
+                  ? "border-error/50 bg-error/5 focus:border-error/50 focus:ring-error/30"
+                  : "border-white/5 bg-white/5 focus:border-secondary-container/40"
+              }`}
             />
           </FormField>
         </div>
