@@ -4,6 +4,7 @@ import { ArrowLeft, Globe, Rocket, Server } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { LogTerminal, type LogEntry } from "@/components/ui/LogTerminal";
+import { ResourceUsage } from "@/components/project/ResourceUsage";
 
 const mockLogs: LogEntry[] = [
   { timestamp: "2026-06-13 14:23:01", level: "info", message: "Project created successfully" },
@@ -82,6 +83,13 @@ export default function ProjectViewPage() {
           </div>
         </div>
       </div>
+
+      {/* Resource Usage */}
+      <ResourceUsage
+        cpu={{ used: 2.4, total: 4 }}
+        ram={{ used: 5.2, total: 8 }}
+        disk={{ used: 42.5, total: 100 }}
+      />
 
       {/* Log terminal */}
       <LogTerminal logs={mockLogs} title="Deployment Logs" />
