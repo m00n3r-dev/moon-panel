@@ -3,8 +3,6 @@
 import {
   LayoutDashboard,
   FolderKanban,
-  MessageSquare,
-  KeyRound,
   Users,
   Settings,
   UserCircle,
@@ -18,8 +16,6 @@ import { usePathname } from "next/navigation";
 const navItems = [
   { label: "Dashboard", href: "/", icon: LayoutDashboard },
   { label: "Projects", href: "/projects", icon: FolderKanban },
-  { label: "Conversations", href: "/conversations", icon: MessageSquare },
-  { label: "API Keys", href: "/api-keys", icon: KeyRound },
   { label: "Users", href: "/users", icon: Users },
   { label: "Settings", href: "/settings", icon: Settings },
 ];
