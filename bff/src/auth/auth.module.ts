@@ -8,11 +8,13 @@ import { PrismaService } from '../lib/PrismaService';
 @Module({
   imports: [
     JwtModule.register({
+      global: true,
       secret: getEnv('JWT_SECRET'),
       signOptions: { expiresIn: '24h' },
     }),
   ],
   controllers: [AuthController],
   providers: [AuthService, PrismaService],
+  exports: [AuthService],
 })
 export class AuthModule {}
