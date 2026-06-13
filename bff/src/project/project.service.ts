@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { Project } from '../generated/prisma/client';
 import { PrismaService } from '../lib/PrismaService';
@@ -20,6 +20,12 @@ export class ProjectService {
     return this.prisma.project.findMany({
       orderBy: { updatedAt: 'desc' },
     });
+  }
+
+  async findById(id: string): Promise<Project> {
+    const project = await this.prisma.project.findUnique({ where: { id } });
+    if (!project) throw new NotFoundException('Project not found');
+    return project;
   }
 
   async create(data: CreateProjectDto): Promise<Project> {
