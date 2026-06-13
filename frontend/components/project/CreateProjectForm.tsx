@@ -3,7 +3,7 @@
 import { Select } from "@/components/ui/Select";
 import { useCreateProject } from "@/hooks/use-create-project";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Plus, Pencil, Globe, Server, Code2, ExternalLink } from "lucide-react";
+import { Loader2, Plus, Pencil, Globe, Server, Code2, ExternalLink, Cpu, MemoryStick, HardDrive } from "lucide-react";
 import { FormEvent, useState } from "react";
 
 const projectTypes = [
@@ -48,6 +48,79 @@ const versionOptions: Record<
   ],
 };
 
+function ResourceSlider({
+  label,
+  icon: Icon,
+  value,
+  onChange,
+  min,
+  max,
+  step = 0.5,
+  unit,
+}: {
+  label: string;
+  icon: React.ElementType;
+  value: number;
+  onChange: (value: number) => void;
+  min: number;
+  max: number;
+  step?: number;
+  unit: string;
+}) {
+  const percentage = ((value - min) / (max - min)) * 100;
+  const barColor =
+    percentage < 50
+      ? "bg-secondary-container"
+      : percentage < 75
+        ? "bg-yellow-400"
+        : "bg-error";
+
+  return (
+    <div className="flex flex-col gap-2 rounded-xl border border-white/5 bg-white/5 px-4 py-3.5">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Icon className="h-4 w-4 text-secondary-fixed-dim" />
+          <span className="text-xs font-medium text-on-surface-variant uppercase tracking-wider">
+            {label}
+          </span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <input
+            type="number"
+            value={value}
+            onChange={(e) => {
+              const v = parseFloat(e.target.value);
+              if (!isNaN(v)) onChange(Math.min(max, Math.max(min, v)));
+            }}
+            className="w-16 rounded-md border border-white/5 bg-surface-container-high px-2 py-1 text-right text-sm font-semibold text-on-surface outline-none transition-all focus:border-secondary-container/40 focus:shadow-[0_0_8px_rgba(5,102,217,0.1)]"
+          />
+          <span className="text-xs text-on-surface-variant/60">{unit}</span>
+        </div>
+      </div>
+      <div className="relative h-2 w-full">
+        <div className="absolute inset-0 rounded-full bg-surface-container-high" />
+        <div
+          className={`absolute inset-y-0 left-0 rounded-full ${barColor}`}
+          style={{ width: `${percentage}%`, boxShadow: percentage >= 50 ? `0 0 6px ${percentage >= 75 ? 'rgba(239,68,68,0.4)' : 'rgba(245,158,11,0.4)'}` : '0 0 6px rgba(5,102,217,0.4)' }}
+        />
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={(e) => onChange(parseFloat(e.target.value))}
+          className="absolute inset-0 w-full cursor-pointer opacity-0"
+        />
+      </div>
+      <div className="flex justify-between text-[10px] text-on-surface-variant/40">
+        <span>{min}{unit}</span>
+        <span>{max}{unit}</span>
+      </div>
+    </div>
+  );
+}
+
 function FormField({
   label,
   icon: Icon,
@@ -91,6 +164,9 @@ export function CreateProjectForm() {
   const [type, setType] = useState<string>("nodejs");
   const [url, setUrl] = useState("");
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [cpu, setCpu] = useState(2);
+  const [memory, setMemory] = useState(4);
+  const [storage, setStorage] = useState(50);
 
   const versions = versionOptions[type] ?? [];
   const [version, setVersion] = useState(versions[0]?.value ?? "");
@@ -118,6 +194,9 @@ export function CreateProjectForm() {
       type: type as "nodejs" | "php" | "reverse-proxy",
       version: selectedVersion.numeric,
       url,
+      cpu,
+      memory,
+      storage,
     });
   }
 
@@ -207,6 +286,46 @@ export function CreateProjectForm() {
               options={versions}
               value={version}
               onChange={setVersion}
+            />
+          </div>
+        </div>
+
+        {/* Resource Allocation */}
+        <div className="flex flex-col gap-3">
+          <label className="flex items-center gap-1.5 text-xs font-medium text-on-surface-variant uppercase tracking-wider">
+            <Server className="h-3.5 w-3.5" />
+            Resource Allocation
+          </label>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <ResourceSlider
+              label="CPU"
+              icon={Cpu}
+              value={cpu}
+              onChange={setCpu}
+              min={0.5}
+              max={8}
+              step={0.5}
+              unit=" cores"
+            />
+            <ResourceSlider
+              label="RAM"
+              icon={MemoryStick}
+              value={memory}
+              onChange={setMemory}
+              min={1}
+              max={32}
+              step={1}
+              unit=" GB"
+            />
+            <ResourceSlider
+              label="Storage"
+              icon={HardDrive}
+              value={storage}
+              onChange={setStorage}
+              min={5}
+              max={500}
+              step={5}
+              unit=" GB"
             />
           </div>
         </div>

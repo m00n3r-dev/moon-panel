@@ -10,6 +10,9 @@ export interface CreateProjectInput {
   type: "nodejs" | "php" | "reverse-proxy";
   version: number;
   url: string;
+  cpu?: number;
+  memory?: number;
+  storage?: number;
 }
 
 interface CreateProjectResponse {
